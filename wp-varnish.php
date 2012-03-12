@@ -114,7 +114,7 @@ class WPVarnish {
 	  $this->WPVarnishPurgeCommonObjects($p->ID);
   }
   function WPVarnishPurgeCommonObjects() {
-    $this->WPVarnishPurgeObject("/");
+    $this->WPVarnishPurgeObject("/?");
     $this->WPVarnishPurgeObject("/feed/");
     $this->WPVarnishPurgeObject("/feed/atom/");
     $this->WPVarnishPurgeObject("/category/(.*)");
@@ -127,7 +127,7 @@ class WPVarnish {
 
   // WPVarnishPurgeAll - Using a regex, clear all blog cache. Use carefully.
   function WPVarnishPurgeAll() {
-    $this->WPVarnishPurgeObject('/(.*)');
+    $this->WPVarnishPurgeObject('.*');
   }
 
   // WPVarnishPurgeURL - Using a URL, clear the cache
@@ -357,7 +357,7 @@ class WPVarnish {
 	    return;
 	  }
         }
-        $out = "purge req.url ~ ^$wpv_url && req.http.host == $wpv_host\n";
+        $out = "ban req.url ~ \"^$wpv_url\$\" && req.http.host == \"$wpv_host\"\n";
       } else {
         $out = "PURGE $wpv_url HTTP/1.0\r\n";
         $out .= "Host: $wpv_host\r\n";
